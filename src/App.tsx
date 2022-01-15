@@ -1,45 +1,46 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [text, setText] = useState("");
+  const title = "Letter Randomiser";
+
+  function random(inputString: string): string {
+    var inputArray = Array.from(inputString);
+    inputArray = inputArray.filter((char) => char.trim().length == 1);
+    var result = shuffleArray(inputArray);
+    return result.join("");
+  }
+
+  // See https://stackoverflow.com/a/12646864/1548379
+  function shuffleArray(array: any[]) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
+        <h1>{title}</h1>
+        <h2>{random(title).toUpperCase()}</h2>
+        <label>Input</label>
+        <textarea
+          autoFocus
+          className="App-input-text"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+        <label>Output</label>
+        <textarea
+          className="App-output-text"
+          value={random(text.toUpperCase())}
+        />
       </header>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
