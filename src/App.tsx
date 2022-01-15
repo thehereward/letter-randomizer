@@ -1,9 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [text, setText] = useState("");
   const title = "Letter Randomiser";
+  const [text, setText] = useState("");
+  const [randomised, setRandomised] = useState("");
 
   function random(inputString: string): string {
     var inputArray = Array.from(inputString);
@@ -25,22 +26,46 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>{title}</h1>
-        <h2>{random(title).toUpperCase()}</h2>
-        <label>Input</label>
-        <textarea
-          autoFocus
-          className="App-input-text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-        />
-        <label>Output</label>
-        <textarea
-          className="App-output-text"
-          value={random(text.toUpperCase())}
-        />
+        <div>{randomised}</div>
+        <form onSubmit={onFormSubmit} className="App-body">
+          <label>Input</label>
+          <textarea
+            autoFocus
+            className="App-input-text"
+            value={text}
+            onKeyUp={onKeyUp}
+            onChange={onInputChange}
+          />
+          <button type="submit">Randomise</button>
+        </form>
       </header>
     </div>
   );
+
+  function formatText(text: string) {
+    return random(text.toUpperCase());
+  }
+
+  function setRandomisedText(text: string) {
+    setRandomised(formatText(text));
+  }
+
+  function onKeyUp(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.currentTarget.value == "10") {
+      setRandomisedText(text);
+    }
+  }
+
+  function onInputChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    var newText = e.target.value.trim();
+    setText(newText);
+    setRandomisedText(newText);
+  }
+
+  function onFormSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setRandomisedText(text);
+  }
 }
 
 export default App;
